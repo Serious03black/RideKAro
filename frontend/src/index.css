@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Apply a subtle gradient background globally */
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100;
+  }
+}

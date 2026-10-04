@@ -8,15 +8,15 @@ const CaptainSignup = () => {
 
   const navigate = useNavigate()
 
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
-  const [ firstName, setFirstName ] = useState('')
-  const [ lastName, setLastName ] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
 
-  const [ vehicleColor, setVehicleColor ] = useState('')
-  const [ vehiclePlate, setVehiclePlate ] = useState('')
-  const [ vehicleCapacity, setVehicleCapacity ] = useState('')
-  const [ vehicleType, setVehicleType ] = useState('')
+  const [vehicleColor, setVehicleColor] = useState('')
+  const [vehiclePlate, setVehiclePlate] = useState('')
+  const [vehicleCapacity, setVehicleCapacity] = useState('')
+  const [vehicleType, setVehicleType] = useState('')
 
 
   const { captain, setCaptain } = React.useContext(CaptainDataContext)
@@ -61,7 +61,7 @@ const CaptainSignup = () => {
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
-        <img className='w-20 mb-3' src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
+        <img className='w-20 mb-3' src="img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
 
         <form onSubmit={(e) => {
           submitHandler(e)

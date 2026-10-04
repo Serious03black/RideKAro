@@ -15,25 +15,25 @@ import { useNavigate } from 'react-router-dom';
 import LiveTracking from '../components/LiveTracking';
 
 const Home = () => {
-    const [ pickup, setPickup ] = useState('')
-    const [ destination, setDestination ] = useState('')
-    const [ panelOpen, setPanelOpen ] = useState(false)
+    const [pickup, setPickup] = useState('')
+    const [destination, setDestination] = useState('')
+    const [panelOpen, setPanelOpen] = useState(false)
     const vehiclePanelRef = useRef(null)
     const confirmRidePanelRef = useRef(null)
     const vehicleFoundRef = useRef(null)
     const waitingForDriverRef = useRef(null)
     const panelRef = useRef(null)
     const panelCloseRef = useRef(null)
-    const [ vehiclePanel, setVehiclePanel ] = useState(false)
-    const [ confirmRidePanel, setConfirmRidePanel ] = useState(false)
-    const [ vehicleFound, setVehicleFound ] = useState(false)
-    const [ waitingForDriver, setWaitingForDriver ] = useState(false)
-    const [ pickupSuggestions, setPickupSuggestions ] = useState([])
-    const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
-    const [ activeField, setActiveField ] = useState(null)
-    const [ fare, setFare ] = useState({})
-    const [ vehicleType, setVehicleType ] = useState(null)
-    const [ ride, setRide ] = useState(null)
+    const [vehiclePanel, setVehiclePanel] = useState(false)
+    const [confirmRidePanel, setConfirmRidePanel] = useState(false)
+    const [vehicleFound, setVehicleFound] = useState(false)
+    const [waitingForDriver, setWaitingForDriver] = useState(false)
+    const [pickupSuggestions, setPickupSuggestions] = useState([])
+    const [destinationSuggestions, setDestinationSuggestions] = useState([])
+    const [activeField, setActiveField] = useState(null)
+    const [fare, setFare] = useState({})
+    const [vehicleType, setVehicleType] = useState(null)
+    const [ride, setRide] = useState(null)
 
     const navigate = useNavigate()
 
@@ -42,7 +42,7 @@ const Home = () => {
 
     useEffect(() => {
         socket.emit("join", { userType: "user", userId: user._id })
-    }, [ user ])
+    }, [user])
 
     socket.on('ride-confirmed', ride => {
 
@@ -72,8 +72,8 @@ const Home = () => {
             console.log(response.data)
             setPickupSuggestions(response.data)
         } catch (err) {
-        console.error('Error fetching pickup suggestions:', err.message);
-    }
+            console.error('Error fetching pickup suggestions:', err.message);
+        }
     }
 
     const handleDestinationChange = async (e) => {
@@ -87,9 +87,9 @@ const Home = () => {
             })
             console.log(response.data)
             setDestinationSuggestions(response.data)
-        }catch (err) {
-        console.error('Error fetching destination suggestions:', err.message);
-    }
+        } catch (err) {
+            console.error('Error fetching destination suggestions:', err.message);
+        }
     }
 
     const submitHandler = (e) => {
@@ -116,7 +116,7 @@ const Home = () => {
                 opacity: 0
             })
         }
-    }, [ panelOpen ])
+    }, [panelOpen])
 
 
     useGSAP(function () {
@@ -129,7 +129,7 @@ const Home = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ vehiclePanel ])
+    }, [vehiclePanel])
 
     useGSAP(function () {
         if (confirmRidePanel) {
@@ -141,7 +141,7 @@ const Home = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ confirmRidePanel ])
+    }, [confirmRidePanel])
 
     useGSAP(function () {
         if (vehicleFound) {
@@ -153,7 +153,7 @@ const Home = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ vehicleFound ])
+    }, [vehicleFound])
 
     useGSAP(function () {
         if (waitingForDriver) {
@@ -165,7 +165,7 @@ const Home = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ waitingForDriver ])
+    }, [waitingForDriver])
 
 
     async function findTrip() {
@@ -201,7 +201,7 @@ const Home = () => {
 
     return (
         <div className='h-screen relative overflow-hidden'>
-            <img className='w-16 absolute left-5 top-5' src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
+            <img className='w-16 absolute left-5 top-5' src="img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="RideKAro logo" />
             <div className='h-screen w-screen'>
                 {/* image for temporary use  */}
                 <LiveTracking />
@@ -242,7 +242,7 @@ const Home = () => {
                     </form>
                     <button
                         onClick={findTrip}
-                        className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
+                        className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full hover:bg-gray-800 transition-colors duration-200'>
                         Find Trip
                     </button>
                 </div>

@@ -12,12 +12,12 @@ import axios from 'axios'
 
 const CaptainHome = () => {
 
-    const [ ridePopupPanel, setRidePopupPanel ] = useState(false)
-    const [ confirmRidePopupPanel, setConfirmRidePopupPanel ] = useState(false)
+    const [ridePopupPanel, setRidePopupPanel] = useState(false)
+    const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
 
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
-    const [ ride, setRide ] = useState(null)
+    const [ride, setRide] = useState(null)
 
     const { socket } = useContext(SocketContext)
     const { captain } = useContext(CaptainDataContext)
@@ -85,7 +85,7 @@ const CaptainHome = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ ridePopupPanel ])
+    }, [ridePopupPanel])
 
     useGSAP(function () {
         if (confirmRidePopupPanel) {
@@ -97,12 +97,12 @@ const CaptainHome = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ confirmRidePopupPanel ])
+    }, [confirmRidePopupPanel])
 
     return (
         <div className='h-screen'>
             <div className='fixed p-6 top-0 flex items-center justify-between w-screen'>
-                <img className='w-16 h-15' src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
+                <img className='w-16 h-15' src="img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
                 <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
                     <i className="text-lg font-medium ri-logout-box-r-line"></i>
                 </Link>

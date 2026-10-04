@@ -40,7 +40,7 @@ const Riding = () => {
                 key: import.meta.env.VITE_RAZORPAY_KEY_ID,
                 amount,
                 currency,
-                name: 'NexTrip',
+                name: 'RideKaro',
                 description: 'Ride Payment',
                 order_id,
                 handler: async (response) => {
@@ -96,7 +96,7 @@ const Riding = () => {
                 {!showFeedbackForm ? (
                     <>
                         <div className='flex items-center justify-between'>
-                            <img className='h-12' src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
+                            <img className='h-12' src="img/b/R29vZ2xl/AVvXsEjh4mBSyhx84yY3fSUSCZaKolesHOd3GUHfgzuXsO2ftgeIIez6QW4gu1x_UY6CPNccJD2pj3XEFND9Nc3-K6epdPMjm11Mughs60ALI1rVJb40v5RnK5auxjMxIlUiaLqGg3_SkW-5_EAJcI2_1eW8vLCT3lLEhss5apWno8QXG2g_g1QHk6A8s33eD9c/s1024/ChatGPT%20Image%20May%2024,%202025,%2004_52_30%20PM.png" alt="" />
                             <div className='text-right'>
                                 <h2 className='text-lg font-medium capitalize'>{ride?.captain.fullname.firstname}</h2>
                                 <h4 className='text-xl font-semibold -mt-1 -mb-1'>{ride?.captain.vehicle.plate}</h4>
