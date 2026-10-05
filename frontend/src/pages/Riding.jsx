@@ -81,6 +81,7 @@ const Riding = () => {
     }
 
     const captain = ride?.captain
+    const captainCoords = captain?.location ? { lat: captain.location.ltd, lng: captain.location.lng } : null
 
     return (
         <div className='h-screen relative overflow-hidden bg-gray-900 text-white' style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -89,9 +90,13 @@ const Riding = () => {
                 <i className="text-xl ri-home-5-line"></i>
             </Link>
 
-            {/* Embedded Live Map */}
+            {/* Embedded Live Map with route from Current Location to Destination */}
             <div className='h-1/2 w-full relative'>
-                <LiveTracking />
+                <LiveTracking
+                    captainLocation={captainCoords}
+                    rideStatus='ongoing'
+                    vehicleType={captain?.vehicle?.vehicleType || 'car'}
+                />
             </div>
 
             {/* Trip Status Card */}

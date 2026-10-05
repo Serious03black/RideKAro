@@ -39,7 +39,10 @@ const CaptainRiding = () => {
 
             {/* Embedded Live Map */}
             <div className='h-screen w-screen absolute inset-0 z-0'>
-                <LiveTracking />
+                <LiveTracking
+                    rideStatus='ongoing'
+                    vehicleType={rideData?.captain?.vehicle?.vehicleType || 'car'}
+                />
             </div>
 
             {/* Bottom Complete Trip Trigger Card */}

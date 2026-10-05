@@ -7,6 +7,7 @@ import gsap from 'gsap'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CapatainContext'
+import LiveTracking from '../components/LiveTracking'
 import axios from 'axios'
 
 const CaptainHome = () => {
@@ -14,6 +15,7 @@ const CaptainHome = () => {
     const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
     const [isOnline, setIsOnline] = useState(true)
     const [showProfile, setShowProfile] = useState(false)
+    const [captainLocation, setCaptainLocation] = useState(null)
 
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
@@ -34,6 +36,12 @@ const CaptainHome = () => {
         const updateLocation = () => {
             if (navigator.geolocation && isOnline && captain?._id) {
                 navigator.geolocation.getCurrentPosition(position => {
+                    const coords = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }
+                    setCaptainLocation(coords)
+
                     socket.emit('update-location-captain', {
                         userId: captain._id,
                         location: {
@@ -61,8 +69,8 @@ const CaptainHome = () => {
     async function confirmRide() {
         try {
             await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
-                rideId: ride._id,
-                captainId: captain._id,
+                rideId: ride?._id,
+                captainId: captain?._id,
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -105,16 +113,18 @@ const CaptainHome = () => {
         navigate('/captain-login')
     }
 
+    const rideStatus = confirmRidePopupPanel ? 'accepted' : ridePopupPanel ? 'searching' : null
+
     return (
-        <div className='h-screen relative overflow-hidden bg-gray-100' style={{ fontFamily: "'Inter', sans-serif" }}>
+        <div className='h-screen relative overflow-hidden bg-gray-900' style={{ fontFamily: "'Inter', sans-serif" }}>
             {/* Header Overlay */}
-            <div className='fixed p-4 top-0 z-20 flex items-center justify-between w-screen bg-gradient-to-b from-black/70 to-transparent'>
-                <div className='flex items-center gap-2 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-500/30 text-white'>
+            <div className='fixed p-4 top-0 z-20 flex items-center justify-between w-screen bg-gradient-to-b from-black/80 to-transparent pointer-events-none'>
+                <div className='pointer-events-auto flex items-center gap-2 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-500/30 text-white shadow-lg'>
                     <span className='w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping'></span>
                     <span className='font-bold text-xs uppercase tracking-wider text-emerald-400'>Captain Portal</span>
                 </div>
 
-                <div className='flex items-center gap-3'>
+                <div className='pointer-events-auto flex items-center gap-3'>
                     {/* Online Toggle Pill */}
                     <button
                         onClick={() => setIsOnline(!isOnline)}
@@ -138,11 +148,16 @@ const CaptainHome = () => {
                 </div>
             </div>
 
-            {/* Map Area */}
-            <div className='h-3/5 relative'>
-                <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="Map" />
+            {/* Embedded Live Map */}
+            <div className='h-3/5 w-full relative z-0'>
+                <LiveTracking
+                    captainLocation={captainLocation}
+                    rideStatus={rideStatus}
+                    vehicleType={captain?.vehicle?.vehicleType || 'car'}
+                />
+
                 {!isOnline && (
-                    <div className='absolute inset-0 bg-black/70 backdrop-blur-xs flex flex-col items-center justify-center text-white p-6 text-center z-10'>
+                    <div className='absolute inset-0 bg-black/80 backdrop-blur-xs flex flex-col items-center justify-center text-white p-6 text-center z-10'>
                         <i className="ri-moon-line text-4xl text-emerald-400 mb-2"></i>
                         <h3 className='text-xl font-bold'>You are currently Offline</h3>
                         <p className='text-xs text-gray-400 mt-1 max-w-xs'>Toggle to Online status to start receiving ride requests nearby.</p>
@@ -157,11 +172,11 @@ const CaptainHome = () => {
             </div>
 
             {/* Captain Stats & Vehicle Info */}
-            <div className='h-2/5 p-5 bg-gray-900 text-white rounded-t-3xl shadow-2xl -mt-6 relative z-10'>
+            <div className='h-2/5 p-5 bg-gray-900 text-white rounded-t-3xl shadow-2xl -mt-6 relative z-10 border-t border-gray-800'>
                 <CaptainDetails />
             </div>
 
-            {/* Ride Popup */}
+            {/* Ride Popup Drawer */}
             <div ref={ridePopupPanelRef} className='fixed w-full z-30 bottom-0 translate-y-full bg-white px-4 py-8 pt-10 rounded-t-3xl shadow-2xl'>
                 <RidePopUp
                     ride={ride}
@@ -171,7 +186,7 @@ const CaptainHome = () => {
                 />
             </div>
 
-            {/* Confirm Ride Popup */}
+            {/* Confirm Ride Popup Drawer */}
             <div ref={confirmRidePopupPanelRef} className='fixed w-full h-screen z-30 bottom-0 translate-y-full bg-white px-4 py-8 pt-10 rounded-t-3xl shadow-2xl overflow-y-auto'>
                 <ConfirmRidePopUp
                     ride={ride}
@@ -191,7 +206,7 @@ const CaptainHome = () => {
                                 </div>
                                 <div>
                                     <h3 className='font-bold text-base capitalize'>
-                                        {captain?.fullname?.firstname} {captain?.fullname?.lastname}
+                                        {captain?.fullname?.firstname} {captain?.fullname?.lastname || ''}
                                     </h3>
                                     <p className='text-xs text-emerald-400 font-semibold'>Captain Account · 4.9★</p>
                                 </div>

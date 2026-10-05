@@ -62,8 +62,14 @@ module.exports.getDistanceTime = async (origin, destination) => {
         }
     } catch (err) {}
 
-    // Dynamic distance calculation based on input string matching
-    const estDistanceKm = Math.floor(Math.random() * 15) + 5;
+    // Deterministic distance calculation based on route string hash (so fare NEVER changes between getFare & createRide)
+    let hash = 0;
+    const str = (origin + destination).toLowerCase().trim();
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+    }
+    const estDistanceKm = (Math.abs(hash) % 12) + 6; // Stable distance between 6 km & 18 km
     const estDurationMin = Math.round(estDistanceKm * 2.2);
 
     return {

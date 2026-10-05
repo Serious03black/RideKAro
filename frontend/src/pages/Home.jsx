@@ -227,6 +227,10 @@ const Home = () => {
         setActiveField('destination')
     }
 
+    // Determine Map Tracking State
+    const currentRideStatus = waitingForDriver ? 'accepted' : vehicleFound ? 'searching' : null
+    const captainCoords = ride?.captain?.location ? { lat: ride.captain.location.ltd, lng: ride.captain.location.lng } : null
+
     return (
         <div className='h-screen relative overflow-hidden' style={{ fontFamily: "'Inter', sans-serif" }}>
             {/* Header overlay */}
@@ -260,9 +264,13 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Live Map background */}
+            {/* Live Map background with interactive markers & pickup routes */}
             <div className='h-screen w-screen'>
-                <LiveTracking />
+                <LiveTracking
+                    captainLocation={captainCoords}
+                    rideStatus={currentRideStatus}
+                    vehicleType={vehicleType}
+                />
             </div>
 
             {/* Bottom Search & Booking Panel */}

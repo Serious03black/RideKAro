@@ -1,10 +1,8 @@
 const rideModel = require('../models/ride.model');
 const mapService = require('./maps.service');
-const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 async function getFare(pickup, destination) {
-
     if (!pickup || !destination) {
         throw new Error('Pickup and destination are required');
     }
@@ -14,36 +12,40 @@ async function getFare(pickup, destination) {
     const baseFare = {
         auto: 30,
         car: 50,
-        moto: 20
+        moto: 20,
+        motorcycle: 20
     };
 
     const perKmRate = {
         auto: 10,
         car: 15,
-        moto: 8
+        moto: 8,
+        motorcycle: 8
     };
 
     const perMinuteRate = {
         auto: 2,
         car: 3,
-        moto: 1.5
+        moto: 1.5,
+        motorcycle: 1.5
     };
 
+    const distKm = distanceTime.distance.value / 1000;
+    const durMin = distanceTime.duration.value / 60;
 
+    const motoFare = Math.round(baseFare.moto + (distKm * perKmRate.moto) + (durMin * perMinuteRate.moto));
+    const autoFare = Math.round(baseFare.auto + (distKm * perKmRate.auto) + (durMin * perMinuteRate.auto));
+    const carFare = Math.round(baseFare.car + (distKm * perKmRate.car) + (durMin * perMinuteRate.car));
 
-    const fare = {
-        auto: Math.round(baseFare.auto + ((distanceTime.distance.value / 1000) * perKmRate.auto) + ((distanceTime.duration.value / 60) * perMinuteRate.auto)),
-        car: Math.round(baseFare.car + ((distanceTime.distance.value / 1000) * perKmRate.car) + ((distanceTime.duration.value / 60) * perMinuteRate.car)),
-        moto: Math.round(baseFare.moto + ((distanceTime.distance.value / 1000) * perKmRate.moto) + ((distanceTime.duration.value / 60) * perMinuteRate.moto))
+    return {
+        auto: autoFare,
+        car: carFare,
+        moto: motoFare,
+        motorcycle: motoFare
     };
-
-    return fare;
-
-
 }
 
 module.exports.getFare = getFare;
-
 
 function getOtp(num) {
     function generateOtp(num) {
@@ -53,7 +55,6 @@ function getOtp(num) {
     return generateOtp(num);
 }
 
-
 module.exports.createRide = async ({
     user, pickup, destination, vehicleType
 }) => {
@@ -61,20 +62,19 @@ module.exports.createRide = async ({
         throw new Error('All fields are required');
     }
 
-    const fare = await getFare(pickup, destination);
+    const fareObj = await getFare(pickup, destination);
+    const selectedFare = fareObj[vehicleType] || fareObj.car;
 
-
-
-    const ride = rideModel.create({
+    const ride = await rideModel.create({
         user,
         pickup,
         destination,
         otp: getOtp(6),
-        fare: fare[ vehicleType ]
-    })
+        fare: selectedFare
+    });
 
     return ride;
-}
+};
 
 module.exports.confirmRide = async ({
     rideId, captain
@@ -88,7 +88,7 @@ module.exports.confirmRide = async ({
     }, {
         status: 'accepted',
         captain: captain._id
-    })
+    });
 
     const ride = await rideModel.findOne({
         _id: rideId
@@ -99,8 +99,7 @@ module.exports.confirmRide = async ({
     }
 
     return ride;
-
-}
+};
 
 module.exports.startRide = async ({ rideId, otp, captain }) => {
     if (!rideId || !otp) {
@@ -127,10 +126,10 @@ module.exports.startRide = async ({ rideId, otp, captain }) => {
         _id: rideId
     }, {
         status: 'ongoing'
-    })
+    });
 
     return ride;
-}
+};
 
 module.exports.endRide = async ({ rideId, captain }) => {
     if (!rideId) {
@@ -154,8 +153,7 @@ module.exports.endRide = async ({ rideId, captain }) => {
         _id: rideId
     }, {
         status: 'completed'
-    })
+    });
 
     return ride;
-}
-
+};
